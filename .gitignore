@@ -3,5 +3,5 @@
 node_modules
 *.d.ts
 *.js
+!.eslintrc.js
 *.map
-!karma.conf.js
