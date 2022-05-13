@@ -13,15 +13,15 @@ import 'angular-mocks'
 import { $http, $q, $rootScope } from 'ngimport'
 import * as PropTypes from 'prop-types'
 import * as React from 'react'
-import { Simulate, act } from 'react-dom/test-utils'
+import { act, Simulate } from 'react-dom/test-utils'
 import { react2angular } from './'
 
 declare global {
   interface Window {
-    IS_REACT_ACT_ENVIRONMENT: boolean;
+    IS_REACT_ACT_ENVIRONMENT: boolean
   }
 }
-window.IS_REACT_ACT_ENVIRONMENT = true;
+window.IS_REACT_ACT_ENVIRONMENT = true
 
 class TestOne extends React.Component<Props> {
   render() {
@@ -167,10 +167,10 @@ class TestEightWrapper implements IComponentOptions {
 
 const TestNine = ({destroyCb}: {destroyCb: () => void}) => {
   React.useEffect(() => {
-    return () => { destroyCb() };
-  }, [destroyCb]);
-  return <div></div>;
-};
+    return () => { destroyCb() }
+  }, [destroyCb])
+  return <div></div>
+}
 
 const TestAngularOne = react2angular(TestOne, ['foo', 'bar', 'baz'])
 const TestAngularTwo = react2angular(TestTwo, ['foo', 'bar', 'baz'])
@@ -200,41 +200,41 @@ interface Props {
   bar: boolean[]
   baz(value: number): any
   foo: number
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
 describe('react2angular', () => {
 
   let $compile: ICompileService
-  let currentScope: IScope | undefined;
+  let currentScope: IScope | undefined
   function useScope<T = {}>(locals?: T): IScope & T {
-    currentScope = $rootScope.$new(true);
-    if(locals) {
-      Object.assign(currentScope, locals);
+    currentScope = $rootScope.$new(true)
+    if (locals) {
+      Object.assign(currentScope, locals)
     }
 
-    const originalApply = currentScope.$apply.bind(currentScope);
+    const originalApply = currentScope.$apply.bind(currentScope)
     currentScope.$apply = (arg?) => {
-      act(() => originalApply(arg as any));
-    };
-    const originalDestroy = currentScope.$destroy.bind(currentScope);
+      act(() => originalApply(arg as any))
+    }
+    const originalDestroy = currentScope.$destroy.bind(currentScope)
     currentScope.$destroy = () => {
-      act(() => originalDestroy());
-    };
+      act(() => originalDestroy())
+    }
 
-    return currentScope as IScope & T;
+    return currentScope as IScope & T
   }
 
   function render(html: string) {
-    const element = $(html);
+    const element = $(html)
     act(() => {
-      if(!currentScope) {
-        currentScope = useScope();
+      if (!currentScope) {
+        currentScope = useScope()
       }
-      $compile(element)(currentScope);
-      $rootScope.$apply();
-    });
-    return element;
+      $compile(element)(currentScope)
+      $rootScope.$apply()
+    })
+    return element
   }
 
   beforeEach(() => {
@@ -245,10 +245,10 @@ describe('react2angular', () => {
   })
 
   afterEach(() => {
-    if(currentScope) {
+    if (currentScope) {
       act(() => currentScope!.$destroy())
     }
-  });
+  })
 
   describe('initialization', () => {
     it('should give an angular component', () => {
@@ -294,8 +294,7 @@ describe('react2angular', () => {
       const injectedDi = (react2angular(TestThree, null, []).controller as any).slice(0, -1)
       expect(injectedDi).toEqual(defaultDi)
     })
-  });
-
+  })
 
   describe('react classes', () => {
     it('should render', () => {
@@ -303,12 +302,12 @@ describe('react2angular', () => {
         bar: [true, false],
         baz: (value: number) => value + 1,
         foo: 1
-      });
+      })
       const element = $(`<test-angular-one foo="foo" bar="bar" baz="baz"></test-angular-one>`)
       act(() => {
         $compile(element)(scope)
         $rootScope.$apply()
-      });
+      })
       expect(element!.find('p').length).toBe(3)
     })
 
@@ -334,7 +333,7 @@ describe('react2angular', () => {
         bar: [true, false],
         baz: (value: number) => value + 1,
         foo: 1
-      });
+      })
       render(`<test-angular-one foo="foo" bar="bar" baz="baz"></test-angular-one>`)
 
       spyOn(TestOne.prototype, 'componentWillUnmount')
@@ -350,7 +349,7 @@ describe('react2angular', () => {
         baz,
         foo: 1
       })
-      const element = render(`<test-angular-one foo="foo" bar="bar" baz="baz"></test-angular-one>`);
+      const element = render(`<test-angular-one foo="foo" bar="bar" baz="baz"></test-angular-one>`)
       Simulate.click(element.find('p').eq(2)[0])
       expect(baz).toHaveBeenCalledWith(42)
     })
@@ -385,7 +384,6 @@ describe('react2angular', () => {
       expect(element2.find('p').text()).withContext('injections should override props').toBe('CONSTANT FOO')
     })
 
-
   describe('react functional components', () => {
     it('should render', () => {
       useScope({
@@ -418,10 +416,10 @@ describe('react2angular', () => {
 
     it('should destroy', () => {
       const foo = jasmine.createSpy('baz')
-      const scope = useScope({ foo });
-      render(`<test-angular-nine destroy-cb="foo"></test-angular-nine>`);
-      scope.$destroy();
-      expect(foo).toHaveBeenCalledTimes(1);
+      const scope = useScope({ foo })
+      render(`<test-angular-nine destroy-cb="foo"></test-angular-nine>`)
+      scope.$destroy()
+      expect(foo).toHaveBeenCalledTimes(1)
     })
 
     it('should take callbacks', () => {
@@ -475,7 +473,7 @@ describe('react2angular', () => {
       // Destroy child component to cause unmount
       act(() => {
         childScope.$destroy()
-      });
+      })
 
       // Make sure render on child was not called after unmount
       expect(componentWillUnmountSpy.calls.count()).toEqual(1)

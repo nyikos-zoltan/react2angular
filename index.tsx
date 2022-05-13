@@ -35,7 +35,7 @@ export function react2angular<Props>(
       root: Root
       constructor($element: IAugmentedJQuery, ...injectedProps: any[]) {
         super()
-        this.root = createRoot($element[0], { });
+        this.root = createRoot($element[0], { })
         this.injectedProps = {}
         injectNames.forEach((name, i) => {
           this.injectedProps[name] = injectedProps[i]
@@ -44,13 +44,13 @@ export function react2angular<Props>(
       render() {
         if (!this.isDestroyed) {
           this.root.render(
-            <Class {...this.props} {...this.injectedProps as any} />,
+            <Class {...this.props} {...this.injectedProps as any} />
           )
         }
       }
       componentWillUnmount() {
         this.isDestroyed = true
-        this.root.unmount();
+        this.root.unmount()
       }
     }]
   }
