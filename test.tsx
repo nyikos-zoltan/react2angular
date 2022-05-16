@@ -10,7 +10,7 @@ import {
   IScope,
   module,
 } from 'angular';
-import * as angular from 'angular';
+import angular from 'angular';
 import 'angular-mocks';
 import { $http, $q, $rootScope } from 'ngimport';
 import * as PropTypes from 'prop-types';
@@ -219,14 +219,16 @@ describe('react2angular', () => {
     return currentScope as IScope & T;
   }
 
-  function render(html: string) {
+  function render(html: string, opts?: { dontApply?: boolean }) {
     const element = $(html);
     act(() => {
       if (!currentScope) {
         currentScope = useScope();
       }
       $compile(element)(currentScope);
-      $rootScope.$apply();
+      if (!opts || !opts.dontApply) {
+        $rootScope.$apply();
+      }
     });
     return element;
   }
@@ -240,7 +242,7 @@ describe('react2angular', () => {
 
   afterEach(() => {
     if (currentScope) {
-      act(() => currentScope.$destroy());
+      act(() => currentScope!.$destroy());
     }
   });
 
@@ -367,10 +369,12 @@ describe('react2angular', () => {
       foo: 'FOO',
     });
 
-    const element1 = render('<test-angular-six foo="foo"></test-angular-six>');
-    const element2 = render('<test-angular-seven foo="foo"></test-angular-seven>');
+    const element1 = render('<test-angular-six foo="foo"></test-angular-six>', { dontApply: true });
+    const element2 = render('<test-angular-seven foo="foo"></test-angular-seven>', { dontApply: true });
 
-    $rootScope.$apply();
+    act(() => {
+      $rootScope.$apply();
+    });
 
     expect($http.get).toHaveBeenCalledWith('https://example.com/');
     expect(element1.find('p').eq(0).text()).toBe('$http response');

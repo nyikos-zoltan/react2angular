@@ -17,6 +17,8 @@
     "preserveConstEnums": true,
     "pretty": true,
     "sourceMap": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "target": "es2015"
   },
