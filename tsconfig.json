@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": false,
-    "declaration": false,
+    "outDir": "./dist",
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "skipLibCheck": true,
@@ -18,13 +19,11 @@
     "pretty": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "strict": true,
     "target": "es2015"
   },
   "files": [
-    "index.tsx",
-    "test.tsx"
+    "index.tsx"
   ],
   "exclude": [
     "node_modules"

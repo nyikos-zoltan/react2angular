@@ -2,10 +2,12 @@
   "name": "@bitrise/react2angular",
   "version": "5.0.0",
   "description": "The easiest way to embed React components in Angular 1 apps!",
-  "main": "index.tsx",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "jest test.tsx"
+    "test": "jest test.tsx",
+    "build": "tsc"
   },
+  "files": ["dist"],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/nyikos-zoltan/react2angular.git"
